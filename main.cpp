@@ -1,47 +1,64 @@
 #include <iostream>
-#include "complex.hpp"
+#include <exception>
 
-using namespace std;
+// add new header files here
+#include "Include/Utils.hpp"
+#include "Include/Matrix.hpp"
+#include "Include/Rootfinding.hpp"
+#include "Include/complex.hpp"
+
+
+// Equation for root finding
+double equation(double x) {
+    return x * x - 4;
+}
 
 int main() {
+    try {
+        // ===============================
+        Utils::print("========================= Complex Number ======================");
 
-    cout << "MyComplex Class\n\n";
+        myComplex c1(2, 3);   
+        myComplex c2(4, -1);
 
-    myComplex c1(1, 2);
-    myComplex c2(3, 4);
-    myComplex c3;
+        myComplex sum = c1.add(c2);
+        myComplex diff = c1.subtract(c2);
+        myComplex prod = c1.multiply(c2);
 
-    // Addition
-    c3 = c1.add(c2);
-     cout << "Addition: "
-           << c3.getReal() << " + " << c3.getImag() << "i\n";    
+        Utils::print("c1 value below");
+        c1.display();
 
-    // Subtraction
-    myComplex sub = c1.subtract(c2);
-    cout << "Subtraction: "
-         << sub.getReal() << " + " << sub.getImag() << "i\n";
+        Utils::print("c2 value below ");
+        c2.display();
 
-    // Multiplication
-    myComplex mul = c1.multiply(c2);
-    cout << "Multiplication: "
-         << mul.getReal() << " + " << mul.getImag() << "i\n";
+        Utils::print("Sum below");
+        sum.display();
 
-    // Division
-    myComplex div = c1.divide(c2);
-    cout << "Division: "
-         << div.getReal() << " + " << div.getImag() << "i\n";
+        Utils::print("Difference below ");
+        diff.display();
 
-    // Conjugate
-    myComplex conj = c1.conjugate();
-    cout << "Conjugate of c1: "
-         << conj.getReal() << " + " << conj.getImag() << "i\n";
+        Utils::print("Product below ");
+        prod.display();
 
-    // Norm
-    cout << "Norm of c1: " << c1.norm() << endl;
+        Utils::print("\n==================Matrix entry================");
 
-    c1.display();
-    c2.display();
-    c3.display();
+        Matrix mat(2, 2);
+        mat.setValue(0, 0, 1);
+        mat.setValue(0, 1, 2);
+        mat.setValue(1, 0, 3);
+        mat.setValue(1, 1, 4);
+
+        mat.display();
+
+        // ===============================
+        Utils::print("\n============= Root Finding (Bisection Method) ============");
+
+        double root = RootFinding::bisection(equation, 3, 5); //add parameters here
+        std::cout << "Root found between: " << root << std::endl;
+    }
+    catch (const std::exception& e) {
+        std::cerr << "Runtime Error: " << e.what() << std::endl;
+    }
 
     return 0;
 }
