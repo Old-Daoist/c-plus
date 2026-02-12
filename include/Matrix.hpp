@@ -21,6 +21,13 @@ public:
 
     // Display matrix
     void display() const;
+
+    // NEW FUNCTIONS
+    int getRows() const;
+    int getCols() const;
+
+    double determinant() const;
+    Matrix inverse() const;
 };
 
 #endif

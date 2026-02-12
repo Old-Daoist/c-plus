@@ -1,44 +1,83 @@
-#include "../Include/Rootfinding.hpp"
-#include <stdexcept>
+#include "Rootfinding.hpp"
 #include <cmath>
+#include <stdexcept>
 
-double RootFinding::bisection(
-    std::function<double(double)> func,
-    double left,
-    double right,
-    double tolerance,
-    int maxIterations
-) {
-    double fLeft = func(left);
-    double fRight = func(right);
+// ================= BISECTION =================
 
-    // Bisection requirement
-    if (fLeft * fRight >= 0) {
-        throw std::invalid_argument(
-            "Bisection method requires opposite signs at interval endpoints"
-        );
+BisectionMethod::BisectionMethod(double left, double right,
+                                 double tol, int maxIter)
+    : RootMethod(tol, maxIter), a(left), b(right) {}
+
+double BisectionMethod::solve(std::function<double(double)> func) {
+    if (func(a) * func(b) >= 0)
+        throw std::runtime_error("Bisection: Invalid interval.");
+
+    double c;
+
+    for (int i = 0; i < maxIterations; ++i) {
+        c = (a + b) / 2.0;
+
+        if (std::abs(func(c)) < tolerance)
+            return c;
+
+        if (func(a) * func(c) < 0)
+            b = c;
+        else
+            a = c;
     }
 
-    double mid = 0.0;
+    throw std::runtime_error("Bisection: Max iterations reached.");
+}
 
-    for (int i = 0; i < maxIterations; i++) {
-        mid = (left + right) / 2.0;
-        double fMid = func(mid);
+// ================= FIXED POINT =================
 
-        // Root found
-        if (std::abs(fMid) < tolerance) {
-            return mid;
-        }
+FixedPointMethod::FixedPointMethod(double guess,
+                                   double tol, int maxIter)
+    : RootMethod(tol, maxIter), initialGuess(guess) {}
 
-        // Narrow the interval
-        if (fLeft * fMid < 0) {
-            right = mid;
-            fRight = fMid;
-        } else {
-            left = mid;
-            fLeft = fMid;
-        }
+double FixedPointMethod::solve(std::function<double(double)> g) {
+    double x0 = initialGuess;
+    double x1;
+
+    for (int i = 0; i < maxIterations; ++i) {
+        x1 = g(x0);
+
+        if (std::abs(x1 - x0) < tolerance)
+            return x1;
+
+        x0 = x1;
     }
 
-    throw std::runtime_error("Bisection method did not converge");
+    throw std::runtime_error("Fixed Point: Max iterations reached.");
+}
+
+// ================= NEWTON RAPHSON =================
+
+NewtonRaphsonMethod::NewtonRaphsonMethod(
+    double guess,
+    std::function<double(double)> deriv,
+    double tol, int maxIter)
+    : RootMethod(tol, maxIter),
+      initialGuess(guess),
+      derivative(deriv) {}
+
+double NewtonRaphsonMethod::solve(std::function<double(double)> func) {
+    double x = initialGuess;
+
+    for (int i = 0; i < maxIterations; ++i) {
+        double fVal = func(x);
+        double dVal = derivative(x);
+
+        if (dVal == 0)
+            throw std::runtime_error("Newton: Derivative zero.");
+
+        double xNew = x - fVal / dVal;
+
+        if (std::abs(xNew - x) < tolerance)
+            return xNew;
+
+        x = xNew;
+    }
+
+    throw std::runtime_error("Newton: Max iterations reached.");
 }
