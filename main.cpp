@@ -66,10 +66,21 @@ int main() {
 
         Matrix mat(2, 2);
 
-        mat.setValue(0, 0, 1);
+        mat.setValue(0, 0, 1); 
         mat.setValue(0, 1, 2);
         mat.setValue(1, 0, 3);
         mat.setValue(1, 1, 4);
+                                         
+        // int n = 3;
+        // Matrix mat(n, n);
+        // for (int i = 0; i < n; i++) {
+        //     for (int j = 0; j < n; j++) {
+        //         double value;
+        //         std::cout << "Enter value [" << i << "," << j << "]: ";
+        //         std::cin >> value;
+        //         mat.setValue(i, j, value);
+
+
 
         mat.display();
 
