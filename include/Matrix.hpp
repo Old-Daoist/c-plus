@@ -22,12 +22,16 @@ public:
     // Display matrix
     void display() const;
 
-    // NEW FUNCTIONS
+    // Getters
     int getRows() const;
     int getCols() const;
 
+    // Determinant and Inverse
     double determinant() const;
     Matrix inverse() const;
+
+    // Gaussian Elimination (solve Ax = b)
+    std::vector<double> solveGaussian(const std::vector<double>& b) const;
 };
 
 #endif

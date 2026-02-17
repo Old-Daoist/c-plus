@@ -82,6 +82,14 @@ int main() {
         Matrix inv = mat.inverse();
         inv.display();
 
+        Utils::print("\nGaussian Elimination Solution:");
+        std::vector<double> b = {5, 11};
+        std::vector<double> solution = mat.solveGaussian(b);
+        for (double val : solution)
+        std::cout << val << " ";
+        std::cout << std::endl;
+
+
 
         // ==========================================================================================
         Utils::print("\n========================= Root Finding ======================");
