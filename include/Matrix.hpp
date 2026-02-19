@@ -30,8 +30,4 @@ public:
     double determinant() const;
     Matrix inverse() const;
 
-    // Gaussian Elimination (solve Ax = b)
-    std::vector<double> solveGaussian(const std::vector<double>& b) const;
-};
-
-#endif
+    
